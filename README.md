@@ -1,112 +1,127 @@
-# Jigglypuff Music Player
+# Jigglypuff
 
-Jigglypuff ek local-first desktop music player hai jo React, Vite, Electron, IndexedDB aur Zustand par built hai. App ka goal simple hai: apne system ke MP3, MP4 ya M4A tracks import karo, unhe library me manage karo, playlist banao, search karo, queue dekho, aur music ko desktop app jaisi feel ke saath play karo.
+Jigglypuff is an offline music player built with React, Vite, Electron, Zustand, and IndexedDB. It lets you import local audio files, browse your library, create playlists, search through tracks, manage the play queue, and run the same app as either a browser-based development build or a desktop application.
 
 ## Screenshots
 
-<p>
-  <img alt="Dashboard preview" width="31%" src="data:image/svg+xml;utf8,%3Csvg%20width='900'%20height='560'%20viewBox='0%200%20900%20560'%20xmlns='http://www.w3.org/2000/svg'%3E%3Crect%20width='900'%20height='560'%20fill='%2311111b'/%3E%3Crect%20x='0'%20y='0'%20width='900'%20height='54'%20fill='%23171628'/%3E%3Crect%20x='0'%20y='54'%20width='78'%20height='420'%20fill='%23131220'/%3E%3Crect%20x='0'%20y='474'%20width='900'%20height='86'%20fill='%23171628'/%3E%3Ctext%20x='116'%20y='104'%20fill='%23ffffff'%20font-family='Arial'%20font-size='34'%20font-weight='700'%3EDashboard%3C/text%3E%3Crect%20x='116'%20y='140'%20width='300'%20height='150'%20rx='12'%20fill='%23202034'%20stroke='%23ff3366'/%3E%3Ctext%20x='142'%20y='186'%20fill='%23ff6690'%20font-family='Arial'%20font-size='20'%20font-weight='700'%3ERecently%20Played%3C/text%3E%3Crect%20x='142'%20y='210'%20width='220'%20height='10'%20rx='5'%20fill='%235b5b70'/%3E%3Crect%20x='142'%20y='234'%20width='180'%20height='10'%20rx='5'%20fill='%233a3a4d'/%3E%3Crect%20x='448'%20y='140'%20width='300'%20height='150'%20rx='12'%20fill='%23202034'%20stroke='%23ff3366'/%3E%3Ctext%20x='474'%20y='186'%20fill='%23ff6690'%20font-family='Arial'%20font-size='20'%20font-weight='700'%3ELibrary%20Stats%3C/text%3E%3Ccircle%20cx='534'%20cy='238'%20r='36'%20fill='%23ff3366'/%3E%3Ccircle%20cx='626'%20cy='238'%20r='36'%20fill='%23f5c542'/%3E%3C/svg%3E" />
-  <img alt="Library preview" width="31%" src="data:image/svg+xml;utf8,%3Csvg%20width='900'%20height='560'%20viewBox='0%200%20900%20560'%20xmlns='http://www.w3.org/2000/svg'%3E%3Crect%20width='900'%20height='560'%20fill='%2311111b'/%3E%3Crect%20x='0'%20y='0'%20width='900'%20height='54'%20fill='%23171628'/%3E%3Crect%20x='0'%20y='54'%20width='78'%20height='420'%20fill='%23131220'/%3E%3Crect%20x='0'%20y='474'%20width='900'%20height='86'%20fill='%23171628'/%3E%3Ctext%20x='116'%20y='104'%20fill='%23ffffff'%20font-family='Arial'%20font-size='34'%20font-weight='700'%3ELibrary%3C/text%3E%3Ctext%20x='116'%20y='142'%20fill='%239b9bb0'%20font-family='Arial'%20font-size='18'%3EImported%20tracks%20with%20sorting%20and%20playlist%20actions%3C/text%3E%3Cg%20fill='%23202034'%20stroke='%23303046'%3E%3Crect%20x='116'%20y='180'%20width='660'%20height='52'%20rx='8'/%3E%3Crect%20x='116'%20y='246'%20width='660'%20height='52'%20rx='8'/%3E%3Crect%20x='116'%20y='312'%20width='660'%20height='52'%20rx='8'/%3E%3C/g%3E%3Cg%20fill='%23ff3366'%3E%3Ccircle%20cx='148'%20cy='206'%20r='16'/%3E%3Ccircle%20cx='148'%20cy='272'%20r='16'/%3E%3Ccircle%20cx='148'%20cy='338'%20r='16'/%3E%3C/g%3E%3Cg%20fill='%23ffffff'%20font-family='Arial'%20font-size='16'%3E%3Ctext%20x='184'%20y='211'%3ETrack%20title%20and%20artist%3C/text%3E%3Ctext%20x='184'%20y='277'%3ESong%20row%20with%20album%3C/text%3E%3Ctext%20x='184'%20y='343'%3EQueue,%20delete,%20add%20to%20playlist%3C/text%3E%3C/g%3E%3C/svg%3E" />
-  <img alt="Playlist preview" width="31%" src="data:image/svg+xml;utf8,%3Csvg%20width='900'%20height='560'%20viewBox='0%200%20900%20560'%20xmlns='http://www.w3.org/2000/svg'%3E%3Crect%20width='900'%20height='560'%20fill='%2311111b'/%3E%3Crect%20x='0'%20y='0'%20width='900'%20height='54'%20fill='%23171628'/%3E%3Crect%20x='0'%20y='54'%20width='78'%20height='420'%20fill='%23131220'/%3E%3Crect%20x='0'%20y='474'%20width='900'%20height='86'%20fill='%23171628'/%3E%3Ctext%20x='116'%20y='104'%20fill='%23ffffff'%20font-family='Arial'%20font-size='34'%20font-weight='700'%3EPlaylists%3C/text%3E%3Crect%20x='620'%20y='76'%20width='138'%20height='38'%20rx='8'%20fill='%23ff3366'/%3E%3Ctext%20x='646'%20y='101'%20fill='%23ffffff'%20font-family='Arial'%20font-size='15'%20font-weight='700'%3ECreate%20new%3C/text%3E%3Cg%3E%3Crect%20x='116'%20y='150'%20width='160'%20height='214'%20rx='10'%20fill='%23202034'%20stroke='%23ff3366'/%3E%3Crect%20x='136'%20y='170'%20width='120'%20height='120'%20rx='8'%20fill='%23ff3366'/%3E%3Ctext%20x='136'%20y='326'%20fill='%23ffffff'%20font-family='Arial'%20font-size='16'%20font-weight='700'%3EWorkout%20Mix%3C/text%3E%3Ctext%20x='136'%20y='350'%20fill='%239b9bb0'%20font-family='Arial'%20font-size='13'%3E12%20tracks%3C/text%3E%3C/g%3E%3Cg%3E%3Crect%20x='308'%20y='150'%20width='160'%20height='214'%20rx='10'%20fill='%23202034'%20stroke='%23ff3366'/%3E%3Crect%20x='328'%20y='170'%20width='120'%20height='120'%20rx='8'%20fill='%23f5c542'/%3E%3Ctext%20x='328'%20y='326'%20fill='%23ffffff'%20font-family='Arial'%20font-size='16'%20font-weight='700'%3EChill%20Night%3C/text%3E%3Ctext%20x='328'%20y='350'%20fill='%239b9bb0'%20font-family='Arial'%20font-size='13'%3E8%20tracks%3C/text%3E%3C/g%3E%3C/svg%3E" />
-</p>
+> Save the screenshots as the following files to render them in this README:
+>
+> - `docs/screenshots/dashboard.png`
+> - `docs/screenshots/library.png`
+> - `docs/screenshots/playlist-detail.png`
 
-## Project Me Kya Hai
+| Dashboard | Library | Playlist Detail |
+| --- | --- | --- |
+| ![Dashboard screen](docs/screenshots/dashboard.png) | ![Library screen](docs/screenshots/library.png) | ![Playlist detail screen](docs/screenshots/playlist-detail.png) |
 
-- Music import flow for MP3, MP4 aur M4A files.
-- Local IndexedDB storage, isliye tracks aur playlists browser/app ke local data me save hote hain.
-- Library view with sorting by title, album, artist/date-added logic.
-- Playlist section jahan playlist create, open, play aur delete kar sakte ho.
-- Playlist detail page for playlist ke tracks, play-all aur remove actions.
-- Search view for tracks, albums aur artists.
-- Player bar with queue, play/pause, skip, shuffle, repeat, volume aur seek controls.
-- Electron setup, taaki same React app desktop app ki tarah run ho sake.
+## What This Project Includes
+
+- Offline-first music playback for local files.
+- Import support for MP3, MP4, M4A, and related audio formats.
+- A dashboard with recently played tracks and new additions.
+- A library view with imported tracks, metadata, duration, and quick actions.
+- Playlist creation, playlist detail pages, playlist playback, and track removal.
+- Search for tracks, artists, and albums.
+- Queue panel for upcoming tracks.
+- Player controls for play, pause, next, previous, shuffle, repeat, seek, and volume.
+- Local data persistence using IndexedDB.
+- Desktop app support through Electron.
 
 ## Tech Stack
 
-- React 19 for UI
-- Vite 8 for frontend dev/build
-- Electron 42 for desktop shell
-- Zustand for app state
-- IndexedDB via `idb` for local data
-- `music-metadata` for reading track metadata
-- CSS Modules for component-level styling
+- React 19
+- Vite 8
+- Electron 42
+- Zustand
+- IndexedDB through `idb`
+- `music-metadata`
+- CSS Modules
+- ESLint
+- Electron Builder
 
-## Folder Structure
+## Project Structure
 
 ```text
 Jigglypuff/
-  electron/          Electron main and preload scripts
-  public/            Static icons and favicon assets
+  electron/              Electron main and preload scripts
+  public/                Static public assets
   src/
-    components/      Reusable UI pieces like PlayerBar, Sidebar, TrackRow
-    hooks/           Audio engine, keyboard shortcuts, drag-drop
-    services/        IndexedDB, metadata parser, blob URL cache
-    store/           Zustand stores for library, player, UI
-    views/           Dashboard, Library, Playlists, Search, Settings
-    styles/          Global CSS, variables, animations
-  package.json       Scripts, dependencies and Electron build config
+    assets/              App images and visual assets
+    components/          Reusable UI components
+    hooks/               Audio engine, keyboard shortcuts, drag-and-drop
+    services/            IndexedDB, metadata parsing, blob URL cache
+    store/               Zustand stores for UI, player, and library state
+    styles/              Global styles, variables, and animations
+    views/               Main screens such as Dashboard, Library, Playlists
+  package.json           Scripts, dependencies, and desktop build config
+  vite.config.js         Vite configuration
 ```
 
 ## Requirements
 
-- Node.js installed
-- npm installed
-- Windows recommended for packaged build, because `electron-builder` config currently targets Windows NSIS
+Install these before running the project:
 
-Check versions:
+- Node.js
+- npm
+
+Check that both are available:
 
 ```bash
 node -v
 npm -v
 ```
 
-## Setup
+## Installation
 
-Fresh clone/download ke baad dependencies install karo:
+Install project dependencies:
 
 ```bash
 npm install
 ```
 
-## Run In Browser
+## Start In Browser
 
-Development server start karne ke liye:
+Run the Vite development server:
 
 ```bash
 npm run dev
 ```
 
-Default URL:
+Open the app at:
 
 ```text
 http://localhost:5173
 ```
 
-Browser me app open ho jayegi. Ye mode UI development aur quick testing ke liye best hai.
+This mode is best for quick frontend development and UI testing.
 
-## Run As Desktop App
+## Start As Desktop App
 
-Electron ke saath app run karne ke liye:
+Run the app through Electron:
 
 ```bash
 npm run electron:dev
 ```
 
-Ye command Vite dev server aur Electron window dono start karti hai.
+This starts the Vite dev server and opens the Electron desktop window.
 
-## Production Build
+## Build The App
 
-Web build generate karne ke liye:
+Create a production web build:
 
 ```bash
 npm run build
 ```
 
-Output `dist/` folder me aayega.
+The generated output is placed in:
+
+```text
+dist/
+```
 
 ## Preview Production Build
 
-Build ke baad local preview:
+After building, preview the production output locally:
 
 ```bash
 npm run preview
@@ -114,67 +129,80 @@ npm run preview
 
 ## Create Windows Installer
 
-Windows installer/package build karne ke liye:
+Build a Windows desktop installer/package:
 
 ```bash
 npm run dist
 ```
 
-Output `release/` folder me generate hota hai.
+The packaged output is generated in:
 
-## Useful Scripts
+```text
+release/
+```
 
-| Command | Kaam |
+## Available Scripts
+
+| Command | Description |
 | --- | --- |
-| `npm run dev` | Vite dev server start karta hai |
-| `npm run electron:dev` | Desktop app dev mode me run karta hai |
-| `npm run build` | Production frontend build banata hai |
-| `npm run preview` | Production build ka local preview |
-| `npm run lint` | ESLint checks run karta hai |
-| `npm run dist` | Windows installer/package banata hai |
+| `npm run dev` | Starts the Vite development server |
+| `npm run electron:dev` | Runs the app in Electron development mode |
+| `npm run build` | Creates a production frontend build |
+| `npm run preview` | Serves the production build locally |
+| `npm run lint` | Runs ESLint checks |
+| `npm run dist` | Builds the Windows desktop installer/package |
 
-## Basic Usage
+## How To Use
 
-1. App start karo.
-2. Import button se audio files select karo.
-3. Library me imported tracks dekho.
-4. Track row ke actions se track ko playlist me add karo.
-5. Playlists tab me playlist create/open/play/delete karo.
-6. Player bar se playback, volume, shuffle, repeat aur queue control karo.
+1. Start the app in browser mode or Electron mode.
+2. Click `Import` and select your audio files.
+3. Open `Library` to view imported tracks.
+4. Use the sidebar to move between Dashboard, Library, Playlists, Queue, and Settings.
+5. Create playlists from the Playlists section.
+6. Add tracks to playlists from the library or playlist flow.
+7. Use the bottom player bar to control playback.
 
-## Notes
+## Data Storage
 
-- Music data local IndexedDB me save hota hai.
-- Agar storage full ho raha ho, app warning notification dikha sakti hai.
-- MP4/M4A files supported hain, lekin metadata quality source file par depend karegi.
-- Electron build ke liye app asset paths relative rakhe gaye hain so packaged desktop app correctly load ho.
+Jigglypuff stores imported music data locally using IndexedDB. This means the app can work offline after files are imported, and your library data stays on the same device/browser profile unless manually cleared.
 
 ## Troubleshooting
 
-### `npm` PowerShell me blocked aa raha hai
+### PowerShell blocks `npm`
 
-Windows PowerShell execution policy ki wajah se `npm.ps1` block ho sakta hai. Is case me command ko `npm.cmd` ke saath run karo:
+On Windows, PowerShell may block `npm.ps1` because of execution policy settings. Use `npm.cmd` instead:
 
 ```bash
 npm.cmd run dev
 npm.cmd run electron:dev
 ```
 
-### Port already in use
+### Port 5173 is already in use
 
-Vite default port `5173` use karta hai. Agar port busy hai, running dev server close karo ya Vite ko another port ke saath run karo:
+Run Vite on another port:
 
 ```bash
 npm run dev -- --port 5174
 ```
 
-### Electron window blank aa rahi hai
+### Electron opens but the app is blank
 
-Pehle verify karo ki Vite server chal raha hai. Phir:
+Make sure the Vite dev server is running, then start Electron again:
 
 ```bash
 npm run electron:dev
 ```
+
+### Imported music does not appear
+
+Check that the selected files are valid audio files and that browser storage is not full. The app stores imported files locally, so storage quota can affect imports.
+
+## Notes
+
+- The app is designed for local/offline playback.
+- Music metadata depends on the source file.
+- The Electron build configuration currently targets Windows.
+- The project is private by default.
 
 ## License
 
