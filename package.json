@@ -10,10 +10,11 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "electron:dev": "concurrently -k \"npm:server\" \"vite\" \"node start-electron.cjs\"",
+    "electron:dev": "set JIGGLYPUFF_DISCORD_CLIENT_ID=1505643997404856410&& concurrently -k \"npm:server\" \"vite\" \"node start-electron.cjs\"",
     "dist": "vite build && electron-builder --win"
   },
   "dependencies": {
+    "discord-rpc": "^4.0.1",
     "idb": "^8.0.3",
     "music-metadata": "^11.12.3",
     "react": "^19.2.6",

@@ -1,9 +1,10 @@
 'use strict';
 
-const { app, BrowserWindow, shell, Menu, dialog } = require('electron');
+const { app, BrowserWindow, shell, Menu, dialog, ipcMain } = require('electron');
 const path = require('path');
 const fs   = require('fs');
 const { fork } = require('child_process');
+const { DiscordRpcService } = require('./discordRpc.cjs');
 
 // ── RAM optimisations (must be called before app is ready) ───────────────────
 
@@ -28,6 +29,14 @@ app.commandLine.appendSwitch('disable-default-apps');
 
 const isDev = !app.isPackaged;
 let apiProcess = null;
+const DISCORD_CLIENT_ID = '1505643997404856410';
+const discordRpc = new DiscordRpcService({
+  clientId: process.env.JIGGLYPUFF_DISCORD_CLIENT_ID || DISCORD_CLIENT_ID,
+  openUrl: process.env.JIGGLYPUFF_DISCORD_OPEN_URL,
+  largeImageKey: process.env.JIGGLYPUFF_DISCORD_LARGE_IMAGE_KEY,
+  smallPlayingImageKey: process.env.JIGGLYPUFF_DISCORD_SMALL_PLAYING_IMAGE_KEY,
+  smallPausedImageKey: process.env.JIGGLYPUFF_DISCORD_SMALL_PAUSED_IMAGE_KEY,
+});
 
 function getDevUrl() {
   return process.env.ELECTRON_START_URL || 'http://localhost:5173';
@@ -124,9 +133,20 @@ function startApiServer() {
   });
 }
 
+ipcMain.handle('discord-rpc:update', (_, presence) => {
+  discordRpc.updatePresence(presence);
+  return { ok: true };
+});
+
+ipcMain.handle('discord-rpc:clear', () => {
+  discordRpc.clear();
+  return { ok: true };
+});
+
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 
 app.whenReady().then(() => {
+  discordRpc.start();
   if (!isDev) startApiServer();
   createWindow();
 
@@ -138,6 +158,7 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => app.quit());
 
 app.on('before-quit', () => {
+  discordRpc.destroy();
   if (apiProcess) {
     apiProcess.kill();
     apiProcess = null;

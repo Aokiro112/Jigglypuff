@@ -25,14 +25,16 @@ export function useAudioEngine({ progressRef, timeRef } = {}) {
   const rafRef = useRef(null);
   const prevTrackIdRef = useRef(null);
   const prevBlobUrlRef = useRef(null);
+  const loadRequestRef = useRef(0);
 
   // Subscribe to store slices we care about
   const currentTrackId = usePlayerStore((s) => s.currentTrackId);
   const isPlaying      = usePlayerStore((s) => s.isPlaying);
+  const playbackNonce  = usePlayerStore((s) => s.playbackNonce);
   const volume         = usePlayerStore((s) => s.volume);
   const isMuted        = usePlayerStore((s) => s.isMuted);
 
-  const { setPlaying, setDuration, nextTrack, setError } = usePlayerStore.getState();
+  const { setDuration, nextTrack, setError } = usePlayerStore.getState();
   const { recordPlay } = useLibraryStore.getState();
 
   // ── Initialize audio element once ────────────────────────────────────────
@@ -42,8 +44,12 @@ export function useAudioEngine({ progressRef, timeRef } = {}) {
     audioRef.current = audio;
 
     return () => {
+      loadRequestRef.current += 1;
       stopRaf();
       audio.pause();
+      audio.onloadedmetadata = null;
+      audio.onended = null;
+      audio.onerror = null;
       audio.src = '';
       if (prevBlobUrlRef.current) {
         releaseUrl(prevBlobUrlRef.current.id);
@@ -92,11 +98,32 @@ export function useAudioEngine({ progressRef, timeRef } = {}) {
 
   // ── Load and play a new track ─────────────────────────────────────────────
   useEffect(() => {
-    if (!currentTrackId) return;
+    if (!currentTrackId) {
+      const audio = audioRef.current;
+      loadRequestRef.current += 1;
+      if (audio) {
+        audio.pause();
+        audio.removeAttribute('src');
+      }
+      prevTrackIdRef.current = null;
+      stopRaf();
+      setDuration(0);
+      return;
+    }
     if (currentTrackId === prevTrackIdRef.current) {
       // Same track (e.g. repeat:one) — just restart
       const audio = audioRef.current;
-      if (audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
+      if (audio) {
+        const requestId = ++loadRequestRef.current;
+        audio.currentTime = 0;
+        if (usePlayerStore.getState().isPlaying) {
+          audio.play().then(() => {
+            if (requestId !== loadRequestRef.current) return;
+            startRaf();
+            recordPlay(currentTrackId);
+          }).catch(() => {});
+        }
+      }
       return;
     }
 
@@ -110,8 +137,13 @@ export function useAudioEngine({ progressRef, timeRef } = {}) {
     }
 
     prevTrackIdRef.current = currentTrackId;
+    audio.onloadedmetadata = null;
+    audio.onended = null;
+    audio.onerror = null;
     audio.pause();
     stopRaf();
+
+    const requestId = ++loadRequestRef.current;
 
     (async () => {
       try {
@@ -121,41 +153,48 @@ export function useAudioEngine({ progressRef, timeRef } = {}) {
           audio.src = getStreamUrl(track.onlineId);
         } else {
           const blob = await getTrackBlob(currentTrackId);
+          if (requestId !== loadRequestRef.current) return;
           if (!blob) throw new Error('Blob not found in IndexedDB');
 
           const url = acquireUrl(currentTrackId, blob);
           prevBlobUrlRef.current = { id: currentTrackId };
           audio.src = url;
         }
+        if (requestId !== loadRequestRef.current) return;
         audio.load();
 
         audio.onloadedmetadata = () => {
+          if (requestId !== loadRequestRef.current) return;
           setDuration(audio.duration || 0);
         };
 
         audio.onended = () => {
+          if (requestId !== loadRequestRef.current) return;
           stopRaf();
-          setPlaying(false);
           nextTrack();
         };
 
         audio.onerror = () => {
+          if (requestId !== loadRequestRef.current) return;
           stopRaf();
           setError(track?.source === 'online'
             ? 'Online playback error. Check the local music API and yt-dlp.'
             : 'Playback error. File may be corrupted.');
         };
 
-        await audio.play();
-        setPlaying(true);
-        startRaf();
-        recordPlay(currentTrackId);
+        if (usePlayerStore.getState().isPlaying) {
+          await audio.play();
+          if (requestId !== loadRequestRef.current) return;
+          startRaf();
+          recordPlay(currentTrackId);
+        }
       } catch (err) {
+        if (requestId !== loadRequestRef.current) return;
         console.error('[AudioEngine] Load error:', err);
         setError(err.message || 'Failed to load track.');
       }
     })();
-  }, [currentTrackId]);
+  }, [currentTrackId, playbackNonce]);
 
   // ── Sync play/pause ───────────────────────────────────────────────────────
   useEffect(() => {

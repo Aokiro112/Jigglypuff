@@ -28,6 +28,7 @@ Jigglypuff is an offline-first and online-capable music player built with React,
 - Search for local tracks, artists, albums, and online results.
 - Queue panel for upcoming tracks.
 - Player controls for play, pause, next, previous, shuffle, repeat, seek, and volume.
+- Discord Rich Presence support for the Electron desktop app.
 - Local data persistence using IndexedDB and localStorage-backed player state.
 - Desktop app support through Electron.
 - No ads, no popup ads, no banner ads, no sponsored content, and no tracking-based monetization UI.
@@ -42,6 +43,7 @@ Jigglypuff is an offline-first and online-capable music player built with React,
 - `music-metadata`
 - `yt-search`
 - `yt-dlp-exec`
+- `discord-rpc`
 - CSS Modules
 - ESLint
 - Electron Builder
@@ -118,6 +120,27 @@ npm run electron:dev
 ```
 
 This starts the local music API, the Vite dev server, and the Electron desktop window together.
+
+Discord Rich Presence is enabled when the Electron process has a Discord application client ID:
+
+```bash
+JIGGLYPUFF_DISCORD_CLIENT_ID=1505643997404856410 npm run electron:dev
+```
+
+In PowerShell:
+
+```powershell
+$env:JIGGLYPUFF_DISCORD_CLIENT_ID="1505643997404856410"; npm run electron:dev
+```
+
+Optional Discord asset and button settings:
+
+| Variable | Description |
+| --- | --- |
+| `JIGGLYPUFF_DISCORD_OPEN_URL` | HTTPS URL for the "Open Jigglypuff" activity button |
+| `JIGGLYPUFF_DISCORD_LARGE_IMAGE_KEY` | Discord developer portal asset key for the main logo, defaults to `jigglypuff_logo` |
+| `JIGGLYPUFF_DISCORD_SMALL_PLAYING_IMAGE_KEY` | Asset key for the playing indicator, defaults to `playing` |
+| `JIGGLYPUFF_DISCORD_SMALL_PAUSED_IMAGE_KEY` | Asset key for the paused indicator, defaults to `paused` |
 
 The local music API runs at:
 

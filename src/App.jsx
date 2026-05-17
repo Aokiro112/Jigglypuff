@@ -16,12 +16,13 @@
  * Audio engine lives here via refs passed to PlayerBar.
  * App only re-renders on view/modal changes, NOT on audio progress.
  */
-import React, { useRef, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import useUiStore, { VIEWS } from './store/uiStore';
 import useLibraryStore from './store/libraryStore';
 import { useAudioEngine } from './hooks/useAudioEngine';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useDragDrop } from './hooks/useDragDrop';
+import { startDiscordPresenceSync } from './services/discordPresence';
 import { revokeAll } from './services/blobUrlCache';
 
 import Sidebar          from './components/Sidebar/Sidebar';
@@ -57,10 +58,13 @@ export default function App() {
     const handleUnload = () => revokeAll();
     window.addEventListener('beforeunload', handleUnload);
     return () => window.removeEventListener('beforeunload', handleUnload);
-  }, []);
+  }, [init]);
 
   // ── Audio engine ──────────────────────────────────────────────────────────
-  const { seek, seekSeconds } = useAudioEngine({ progressRef, timeRef });
+  const { audioRef, seek, seekSeconds } = useAudioEngine({ progressRef, timeRef });
+
+  // Discord Rich Presence sync runs through Electron IPC and does not affect UI.
+  useEffect(() => startDiscordPresenceSync(audioRef), [audioRef]);
 
   // ── Keyboard shortcuts ────────────────────────────────────────────────────
   useKeyboardShortcuts({ seekSeconds });
