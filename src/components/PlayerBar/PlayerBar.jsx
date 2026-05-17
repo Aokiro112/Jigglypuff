@@ -13,7 +13,7 @@ import useLibraryStore from '../../store/libraryStore';
 import CoverArt from '../CoverArt/CoverArt';
 import {
   IconPlay, IconPause, IconSkipNext, IconSkipPrev,
-  IconShuffle, IconRepeat, IconRepeat1, IconHeart, IconVolume, IconVolumeMute,
+  IconShuffle, IconRepeat, IconRepeat1, IconHeart, IconHeartFilled, IconVolume, IconVolumeMute,
 } from '../Icons';
 import styles from './PlayerBar.module.css';
 
@@ -36,7 +36,10 @@ export default function PlayerBar({ progressRef, timeRef, onSeek }) {
     usePlayerStore.getState();
 
   const tracks = useLibraryStore((s) => s.tracks);
+  const favoriteIds = useLibraryStore((s) => s.favoriteIds);
+  const toggleFavorite = useLibraryStore((s) => s.toggleFavorite);
   const track  = tracks.find((t) => t.id === currentTrackId) ?? null;
+  const isFavorite = currentTrackId ? favoriteIds.includes(currentTrackId) : false;
 
   const handleSeekChange = useCallback((e) => {
     onSeek(parseFloat(e.target.value));
@@ -73,6 +76,7 @@ export default function PlayerBar({ progressRef, timeRef, onSeek }) {
           <CoverArt
             trackId={currentTrackId}
             hasCover={track?.hasCover ?? false}
+            thumbnailUrl={track?.thumbnailUrl}
             size={42}
             className={styles.coverArt}
           />
@@ -137,6 +141,16 @@ export default function PlayerBar({ progressRef, timeRef, onSeek }) {
 
         {/* ── Right: time + volume ── */}
         <div className={styles.rightControls}>
+          <button
+            className={`${styles.ctrlBtn} ${isFavorite ? styles.active : ''}`}
+            onClick={() => currentTrackId && toggleFavorite(currentTrackId)}
+            title={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
+            id="ctrl-favorite"
+            disabled={!currentTrackId}
+          >
+            {isFavorite ? <IconHeartFilled size={16} /> : <IconHeart size={16} />}
+          </button>
+
           {/* Time display — updated via DOM in useAudioEngine rAF loop */}
           <span
             ref={timeRef}

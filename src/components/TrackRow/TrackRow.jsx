@@ -78,7 +78,7 @@ const TrackRow = memo(function TrackRow({ track, index, allIds, showDelete, onDe
         )}
       </div>
 
-      <CoverArt trackId={track.id} hasCover={track.hasCover} size={38} />
+      <CoverArt trackId={track.id} hasCover={track.hasCover} thumbnailUrl={track.thumbnailUrl} size={38} />
 
       <div className={styles.meta}>
         <span className={`${styles.title} truncate`}>{track.title}</span>

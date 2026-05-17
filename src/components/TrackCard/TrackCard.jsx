@@ -38,7 +38,7 @@ const TrackCard = memo(function TrackCard({ track, tracks, label, sublabel, onCl
       id={`card-${track?.id}`}
     >
       <div className={styles.artWrap}>
-        <CoverArt trackId={track?.id} hasCover={track?.hasCover} size={110} />
+        <CoverArt trackId={track?.id} hasCover={track?.hasCover} thumbnailUrl={track?.thumbnailUrl} size={110} />
         {/* Play overlay */}
         <div className={styles.playOverlay} onClick={handlePlay}>
           {isActive && isPlaying

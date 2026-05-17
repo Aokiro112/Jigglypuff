@@ -3,6 +3,7 @@
 const { app, BrowserWindow, shell, Menu, dialog } = require('electron');
 const path = require('path');
 const fs   = require('fs');
+const { fork } = require('child_process');
 
 // ── RAM optimisations (must be called before app is ready) ───────────────────
 
@@ -26,6 +27,7 @@ app.commandLine.appendSwitch('disable-default-apps');
 // ── Dev / prod ────────────────────────────────────────────────────────────────
 
 const isDev = !app.isPackaged;
+let apiProcess = null;
 
 function getDevUrl() {
   return process.env.ELECTRON_START_URL || 'http://localhost:5173';
@@ -107,9 +109,25 @@ function createWindow() {
   });
 }
 
+function startApiServer() {
+  if (apiProcess) return;
+  const serverPath = path.join(__dirname, '../backend/server.cjs');
+  if (!fs.existsSync(serverPath)) return;
+
+  apiProcess = fork(serverPath, [], {
+    env: { ...process.env, JIGGLYPUFF_API_PORT: process.env.JIGGLYPUFF_API_PORT || '3939' },
+    stdio: isDev ? 'inherit' : 'ignore',
+  });
+
+  apiProcess.on('exit', () => {
+    apiProcess = null;
+  });
+}
+
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 
 app.whenReady().then(() => {
+  if (!isDev) startApiServer();
   createWindow();
 
   app.on('activate', () => {
@@ -118,3 +136,10 @@ app.whenReady().then(() => {
 });
 
 app.on('window-all-closed', () => app.quit());
+
+app.on('before-quit', () => {
+  if (apiProcess) {
+    apiProcess.kill();
+    apiProcess = null;
+  }
+});

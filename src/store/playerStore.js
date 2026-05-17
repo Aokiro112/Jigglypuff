@@ -6,6 +6,7 @@
  * to avoid React rerenders on every timeupdate event (~4x/sec).
  */
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 export const REPEAT = {
   NONE: 'none',
@@ -13,7 +14,7 @@ export const REPEAT = {
   ALL: 'all',
 };
 
-const usePlayerStore = create((set, get) => ({
+const usePlayerStore = create(persist((set, get) => ({
   // ── Current track ──────────────────────────────────────────────────────────
   currentTrackId: null,
   isPlaying: false,
@@ -128,6 +129,16 @@ const usePlayerStore = create((set, get) => ({
   clearQueue: () => set({ queue: [], queueIndex: 0 }),
 
   setError: (error) => set({ error, isPlaying: false }),
+}), {
+  name: 'jigglypuff-player-state',
+  partialize: (s) => ({
+    volume: s.volume,
+    isMuted: s.isMuted,
+    shuffle: s.shuffle,
+    repeat: s.repeat,
+    queue: s.queue,
+    queueIndex: s.queueIndex,
+  }),
 }));
 
 export default usePlayerStore;

@@ -6,10 +6,11 @@
   "main": "electron/main.cjs",
   "scripts": {
     "dev": "vite",
+    "server": "node backend/server.cjs",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "electron:dev": "concurrently -k \"vite\" \"node start-electron.cjs\"",
+    "electron:dev": "concurrently -k \"npm:server\" \"vite\" \"node start-electron.cjs\"",
     "dist": "vite build && electron-builder --win"
   },
   "dependencies": {
@@ -17,6 +18,8 @@
     "music-metadata": "^11.12.3",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
+    "yt-dlp-exec": "^1.0.2",
+    "yt-search": "^2.13.1",
     "zustand": "^5.0.13"
   },
   "devDependencies": {
@@ -38,15 +41,25 @@
     "appId": "com.jigglypuff.musicplayer",
     "productName": "Jigglypuff",
     "asar": true,
-    "directories": { "output": "release" },
+    "directories": {
+      "output": "release"
+    },
     "files": [
       "dist/**/*",
       "electron/**/*",
+      "backend/**/*",
       "build/icon.png",
       "package.json"
     ],
     "win": {
-      "target": [{ "target": "nsis", "arch": ["x64"] }],
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
       "icon": "build/icon.png"
     },
     "nsis": {

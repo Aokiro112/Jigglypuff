@@ -70,7 +70,7 @@ export async function addTrack(track) {
     await db.put('tracks', track);
   } catch (err) {
     if (err.name === 'QuotaExceededError') {
-      throw new Error('QUOTA_EXCEEDED');
+      throw new Error('QUOTA_EXCEEDED', { cause: err });
     }
     throw err;
   }
@@ -84,10 +84,14 @@ export async function getAllTracks() {
   const db = await getDB();
   const all = await db.getAll('tracks');
   // Strip blob to keep renderer memory low; only load on demand
-  return all.map(({ blob, coverBlob, ...meta }) => ({
-    ...meta,
-    hasCover: !!coverBlob,
-  }));
+  return all.map((track) => {
+    const { coverBlob, ...meta } = track;
+    delete meta.blob;
+    return {
+      ...meta,
+      hasCover: !!coverBlob || !!meta.thumbnailUrl || !!meta.hasCover,
+    };
+  });
 }
 
 /**

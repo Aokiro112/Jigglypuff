@@ -9,14 +9,18 @@ import { IconMusic } from '../Icons';
 import styles from './CoverArt.module.css';
 
 /**
- * @param {{ trackId: string, hasCover: boolean, size?: number, className?: string }} props
+ * @param {{ trackId: string, hasCover: boolean, thumbnailUrl?: string, size?: number, className?: string }} props
  */
-const CoverArt = React.memo(function CoverArt({ trackId, hasCover, size = 48, className = '' }) {
+const CoverArt = React.memo(function CoverArt({ trackId, hasCover, thumbnailUrl, size = 48, className = '' }) {
   const ref      = useRef(null);
   const [src, setSrc] = useState(null);
   const loadedId  = useRef(null);
 
   useEffect(() => {
+    if (thumbnailUrl) {
+      setSrc(thumbnailUrl);
+      return;
+    }
     if (!hasCover || !trackId) return;
 
     const el = ref.current;
@@ -46,7 +50,7 @@ const CoverArt = React.memo(function CoverArt({ trackId, hasCover, size = 48, cl
         loadedId.current = null;
       }
     };
-  }, [trackId, hasCover]);
+  }, [trackId, hasCover, thumbnailUrl]);
 
   return (
     <div

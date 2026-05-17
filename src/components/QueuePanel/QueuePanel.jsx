@@ -54,7 +54,7 @@ export default function QueuePanel() {
                 onClick={() => loadQueue(queue, idx)}
                 id={`queue-row-${idx}`}
               >
-                <CoverArt trackId={t.id} hasCover={t.hasCover} size={36} />
+                <CoverArt trackId={t.id} hasCover={t.hasCover} thumbnailUrl={t.thumbnailUrl} size={36} />
                 <div className={styles.rowMeta}>
                   <span className={`${styles.rowTitle} truncate`}>{t.title}</span>
                   <span className={`${styles.rowArtist} truncate`}>{t.artist}</span>

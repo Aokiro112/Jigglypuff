@@ -13,6 +13,7 @@ import usePlayerStore from '../store/playerStore';
 import useLibraryStore from '../store/libraryStore';
 import { getTrackBlob } from '../services/db';
 import { acquireUrl, releaseUrl } from '../services/blobUrlCache';
+import { getStreamUrl } from '../services/onlineMusic';
 
 /**
  * @param {{ progressRef: React.RefObject, timeRef: React.RefObject }} refs
@@ -114,12 +115,18 @@ export function useAudioEngine({ progressRef, timeRef } = {}) {
 
     (async () => {
       try {
-        const blob = await getTrackBlob(currentTrackId);
-        if (!blob) throw new Error('Blob not found in IndexedDB');
+        const track = useLibraryStore.getState().tracks.find((t) => t.id === currentTrackId);
+        if (track?.source === 'online') {
+          if (!track.onlineId) throw new Error('Online track is missing a stream id.');
+          audio.src = getStreamUrl(track.onlineId);
+        } else {
+          const blob = await getTrackBlob(currentTrackId);
+          if (!blob) throw new Error('Blob not found in IndexedDB');
 
-        const url = acquireUrl(currentTrackId, blob);
-        prevBlobUrlRef.current = { id: currentTrackId };
-        audio.src = url;
+          const url = acquireUrl(currentTrackId, blob);
+          prevBlobUrlRef.current = { id: currentTrackId };
+          audio.src = url;
+        }
         audio.load();
 
         audio.onloadedmetadata = () => {
@@ -134,7 +141,9 @@ export function useAudioEngine({ progressRef, timeRef } = {}) {
 
         audio.onerror = () => {
           stopRaf();
-          setError('Playback error. File may be corrupted.');
+          setError(track?.source === 'online'
+            ? 'Online playback error. Check the local music API and yt-dlp.'
+            : 'Playback error. File may be corrupted.');
         };
 
         await audio.play();

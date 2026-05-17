@@ -13,6 +13,8 @@ import {
   getRecentlyPlayed,
   recordPlay,
   checkStorageQuota,
+  getSetting,
+  saveSetting,
 } from '../services/db';
 import { parseTrackMetadata } from '../services/metadataParser';
 import { generateId } from '../utils/generateId';
@@ -23,6 +25,8 @@ const useLibraryStore = create((set, get) => ({
   tracks: [],        // TrackMeta[] — no blob data
   playlists: [],
   recentlyPlayed: [], // [{ trackId, timestamp }]
+  favoriteIds: [],
+  searchHistory: [],
   isLoading: false,
   importProgress: null, // { current, total } | null
   storageWarning: null, // null | 'approaching' | 'critical'
@@ -38,7 +42,11 @@ const useLibraryStore = create((set, get) => ({
         getAllPlaylists(),
         getRecentlyPlayed(),
       ]);
-      set({ tracks, playlists, recentlyPlayed, isLoading: false });
+      const [favoriteIds, searchHistory] = await Promise.all([
+        getSetting('favoriteIds', []),
+        getSetting('searchHistory', []),
+      ]);
+      set({ tracks, playlists, recentlyPlayed, favoriteIds, searchHistory, isLoading: false });
       // Check quota after loading
       get().checkQuota();
     } catch (err) {
@@ -148,14 +156,63 @@ const useLibraryStore = create((set, get) => ({
 
   deleteTrack: async (trackId) => {
     await dbDeleteTrack(trackId);
+    const favoriteIds = get().favoriteIds.filter((id) => id !== trackId);
+    await saveSetting('favoriteIds', favoriteIds);
     set((s) => ({
       tracks: s.tracks.filter((t) => t.id !== trackId),
+      favoriteIds,
       recentlyPlayed: s.recentlyPlayed.filter((r) => r.trackId !== trackId),
       playlists: s.playlists.map((p) => ({
         ...p,
         trackIds: p.trackIds.filter((id) => id !== trackId),
       })),
     }));
+  },
+
+  addOnlineTrack: async (track) => {
+    const existing = get().tracks.find((t) => t.id === track.id);
+    if (existing) return existing;
+
+    const record = {
+      id: track.id,
+      onlineId: track.onlineId,
+      title: track.title,
+      artist: track.artist,
+      album: track.album || 'Online',
+      duration: track.duration || 0,
+      mimeType: track.mimeType || 'audio/online',
+      filename: track.filename || `${track.title}.youtube`,
+      hasCover: !!track.thumbnailUrl,
+      thumbnailUrl: track.thumbnailUrl,
+      source: 'online',
+      addedAt: track.addedAt || Date.now(),
+    };
+
+    await addTrack(record);
+    set((s) => ({ tracks: [...s.tracks, record] }));
+    useUiStore.getState().showNotification({
+      type: 'success',
+      message: `Added "${record.title}" to library.`,
+      duration: 2500,
+    });
+    return record;
+  },
+
+  toggleFavorite: async (trackId) => {
+    const { favoriteIds } = get();
+    const next = favoriteIds.includes(trackId)
+      ? favoriteIds.filter((id) => id !== trackId)
+      : [...favoriteIds, trackId];
+    await saveSetting('favoriteIds', next);
+    set({ favoriteIds: next });
+  },
+
+  recordSearchQuery: async (query) => {
+    const q = query.trim();
+    if (!q) return;
+    const next = [q, ...get().searchHistory.filter((item) => item.toLowerCase() !== q.toLowerCase())].slice(0, 10);
+    await saveSetting('searchHistory', next);
+    set({ searchHistory: next });
   },
 
   // ── Playlists ─────────────────────────────────────────────────────────────
