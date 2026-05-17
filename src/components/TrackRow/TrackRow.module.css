@@ -1,0 +1,190 @@
+.row {
+  display: grid;
+  grid-template-columns: 32px 40px 1fr 1fr 60px auto;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  position: relative;
+}
+
+.row:hover {
+  background: rgba(255,51,102,0.1);
+}
+
+.row.active {
+  background: rgba(255,51,102,0.15);
+}
+
+.num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+}
+
+.indexNum {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.eqBars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 14px;
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-main);
+  max-width: 200px;
+}
+
+.row.active .title {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+.artist {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  max-width: 200px;
+}
+
+.album {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  max-width: 160px;
+}
+
+.duration {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+/* ── Action buttons area ───────────────────────────────────────── */
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.actionBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity var(--transition-fast), color var(--transition-fast), background var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.row:hover .actionBtn {
+  opacity: 1;
+}
+
+.actionBtn:hover {
+  color: var(--color-accent);
+  background: rgba(255,51,102,0.15);
+}
+
+/* ── Add-to-playlist dropdown ─────────────────────────────────── */
+
+.menuWrap {
+  position: relative;
+}
+
+.dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  z-index: 200;
+  min-width: 170px;
+  background: var(--bg-card, #1a1a2e);
+  border: 1px solid rgba(255,51,102,0.25);
+  border-radius: var(--radius-md, 8px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  overflow: hidden;
+  animation: dropdownIn 0.15s ease;
+}
+
+@keyframes dropdownIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.dropdownTitle {
+  padding: 8px 12px 6px;
+  font-size: var(--font-size-xs, 11px);
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.dropdownEmpty {
+  padding: 10px 12px;
+  font-size: var(--font-size-sm, 13px);
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.dropdownItem {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 12px;
+  font-size: var(--font-size-sm, 13px);
+  color: var(--text-main);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background var(--transition-fast);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.dropdownItem:hover {
+  background: rgba(255,51,102,0.15);
+  color: var(--color-accent);
+}
+
+/* Legacy deleteBtn kept for backwards compat if referenced elsewhere */
+.deleteBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity var(--transition-fast), color var(--transition-fast);
+}
+
+.row:hover .deleteBtn {
+  opacity: 1;
+}
+
+.deleteBtn:hover {
+  color: var(--color-error);
+}

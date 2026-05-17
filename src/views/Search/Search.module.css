@@ -1,0 +1,77 @@
+.searchView {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  animation: fadeIn var(--transition-base) ease both;
+}
+
+.header {
+  padding: var(--space-6) var(--space-6) var(--space-3);
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+  margin-bottom: var(--space-2);
+}
+
+.queryLabel {
+  font-size: var(--font-size-base);
+  color: var(--text-muted);
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-2);
+  padding: 0 var(--space-6) var(--space-4);
+  flex-shrink: 0;
+}
+
+.tab {
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  border: 1.5px solid transparent;
+  transition: all var(--transition-fast);
+}
+
+.tab:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.tab.activeTab {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: white;
+  box-shadow: var(--shadow-card);
+}
+
+.results {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 var(--space-6) var(--space-6);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-4);
+}
+
+.trackList {
+  display: flex;
+  flex-direction: column;
+}
+
+.empty, .noResults {
+  padding: var(--space-10);
+  color: var(--text-muted);
+  text-align: center;
+  font-size: var(--font-size-base);
+}

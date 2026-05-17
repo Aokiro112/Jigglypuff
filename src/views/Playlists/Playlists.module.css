@@ -1,0 +1,198 @@
+.playlists {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  animation: fadeIn var(--transition-base) ease both;
+}
+
+.header {
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+
+.title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+}
+
+.headerActions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.createBtn, .importBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border: var(--border-accent);
+  transition: transform var(--transition-fast), background var(--transition-fast);
+  will-change: transform;
+}
+
+.createBtn {
+  background: var(--color-accent);
+  color: white;
+  box-shadow: var(--shadow-card);
+}
+
+.createBtn:hover {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.importBtn {
+  background: transparent;
+  color: var(--color-accent);
+}
+
+.importBtn:hover {
+  background: var(--color-accent);
+  color: white;
+}
+
+.createForm {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-6) var(--space-4);
+  flex-shrink: 0;
+  animation: slideInDown var(--transition-base) ease both;
+}
+
+.createInput {
+  flex: 1;
+  max-width: 300px;
+  height: 36px;
+  padding: 0 var(--space-3);
+  background: var(--color-bg-input);
+  border: var(--border-accent);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  color: var(--text-main);
+  user-select: text;
+}
+
+.createInput:focus {
+  box-shadow: 0 0 0 3px var(--color-accent-light);
+}
+
+.createSubmit {
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-accent);
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border: var(--border-accent);
+}
+
+.createCancel {
+  padding: var(--space-2) var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--text-muted);
+  border-radius: var(--radius-md);
+}
+
+.grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-2) var(--space-6) var(--space-6);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-4);
+  align-content: start;
+}
+
+.card {
+  background: var(--color-bg-card);
+  border: var(--border-accent);
+  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.artWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+}
+
+.artWrap > *:first-child {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.playOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.card:hover .playOverlay {
+  opacity: 1;
+}
+
+.cardInfo {
+  padding: var(--space-2) var(--space-3);
+  display: flex;
+  flex-direction: column;
+}
+
+.cardName {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-main);
+  max-width: 120px;
+}
+
+.cardCount {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.deleteBtn {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.card:hover .deleteBtn {
+  opacity: 1;
+}
+
+.empty {
+  grid-column: 1/-1;
+  color: var(--text-muted);
+  font-size: var(--font-size-base);
+  text-align: center;
+  padding: var(--space-8);
+}

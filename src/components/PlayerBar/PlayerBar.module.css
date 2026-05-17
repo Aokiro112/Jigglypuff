@@ -1,0 +1,202 @@
+.playerBar {
+  height: var(--player-height);
+  background: var(--color-player-bar);
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: var(--z-player);
+  border-top: 1.5px solid rgba(255,51,102,0.3);
+}
+
+/* ── Progress strip ─────────────────────────────────────────────────────── */
+.progressWrap {
+  width: 100%;
+  height: var(--progress-strip-h);
+  flex-shrink: 0;
+}
+
+/* Custom range input for progress */
+.progressSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: var(--progress-strip-h);
+  background: linear-gradient(
+    to right,
+    var(--color-accent) var(--prog, 0%),
+    rgba(255,51,102,0.2) var(--prog, 0%)
+  );
+  cursor: pointer;
+  border: none;
+  outline: none;
+  display: block;
+}
+
+.progressSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  cursor: pointer;
+  margin-top: -4.5px;
+  transition: transform var(--transition-fast);
+  will-change: transform;
+}
+
+.progressSlider::-webkit-slider-runnable-track {
+  height: var(--progress-strip-h);
+}
+
+.progressSlider:hover::-webkit-slider-thumb {
+  transform: scale(1.4);
+}
+
+/* ── Inner row ──────────────────────────────────────────────────────────── */
+.inner {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--space-4);
+  gap: var(--space-3);
+}
+
+/* ── Left: track info ───────────────────────────────────────────────────── */
+.trackInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 200px;
+  min-width: 0;
+  flex-shrink: 0;
+}
+
+.coverArt {
+  border-radius: var(--radius-sm);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-light);
+  max-width: 130px;
+}
+
+.artist {
+  font-size: var(--font-size-xs);
+  color: var(--text-light-muted);
+  max-width: 130px;
+}
+
+/* ── Center: controls ───────────────────────────────────────────────────── */
+.controls {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.ctrlBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-light-muted);
+  transition: color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+  will-change: transform;
+  flex-shrink: 0;
+}
+
+.ctrlBtn:hover {
+  color: var(--text-light);
+  transform: scale(1.1);
+}
+
+.ctrlBtn:active {
+  transform: scale(0.9);
+}
+
+.ctrlBtn.active {
+  color: var(--color-accent);
+}
+
+/* Play/Pause — larger, accent background */
+.playBtn {
+  width: 40px;
+  height: 40px;
+  background: var(--color-accent);
+  border-radius: var(--radius-full);
+  color: white !important;
+  box-shadow: 0 0 14px rgba(255,51,102,0.5);
+}
+
+.playBtn:hover {
+  background: var(--color-accent-hover);
+  transform: scale(1.08) !important;
+}
+
+.playBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ── Right: time + volume ───────────────────────────────────────────────── */
+.rightControls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 200px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.timeDisplay {
+  font-size: var(--font-size-xs);
+  color: var(--text-light-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  min-width: 70px;
+  text-align: right;
+}
+
+/* Volume slider */
+.volumeSlider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 80px;
+  height: 4px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(
+    to right,
+    var(--color-accent) var(--vol, 80%),
+    rgba(255,51,102,0.2) var(--vol, 80%)
+  );
+  cursor: pointer;
+  outline: none;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+  will-change: transform;
+}
+
+.volumeSlider:hover::-webkit-slider-thumb {
+  transform: scale(1.3);
+}

@@ -1,0 +1,23 @@
+.appShell {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--color-bg-main);
+}
+
+.mainRow {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  min-height: 0; /* allow flex children to shrink */
+}
+
+.mainContent {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}

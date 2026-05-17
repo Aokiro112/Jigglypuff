@@ -1,0 +1,193 @@
+.detail {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  animation: fadeIn var(--transition-base) ease both;
+}
+
+.notFound {
+  padding: var(--space-8);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.header {
+  padding: var(--space-4) var(--space-6);
+  flex-shrink: 0;
+  border-bottom: 1.5px solid rgba(255,51,102,0.2);
+}
+
+.backBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  margin-bottom: var(--space-4);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  transition: background var(--transition-fast);
+}
+
+.backBtn:hover {
+  background: rgba(255,51,102,0.1);
+}
+
+.playlistMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.coverWrap {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  border: var(--border-accent);
+}
+
+.metaText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.name {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-main);
+}
+
+.count {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.playAllBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-accent);
+  color: white;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border: var(--border-accent);
+  box-shadow: var(--shadow-card);
+  width: fit-content;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  will-change: transform;
+}
+
+.playAllBtn:hover:not(:disabled) {
+  transform: translate(-1px, -1px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.playAllBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.addMenuWrap {
+  position: relative;
+  width: fit-content;
+}
+
+.addTracksBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-4);
+  background: transparent;
+  color: var(--color-accent);
+  border: var(--border-accent);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  width: fit-content;
+}
+
+.addTracksBtn:hover:not(:disabled) {
+  background: rgba(255,51,102,0.1);
+}
+
+.addTracksBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.addDropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 200;
+  width: min(320px, calc(100vw - 48px));
+  max-height: 300px;
+  overflow-y: auto;
+  background: var(--color-bg-card);
+  border: var(--border-accent);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.addDropdownTitle {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.addDropdownEmpty {
+  padding: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+}
+
+.addDropdownItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.addDropdownItem:hover {
+  background: rgba(255,51,102,0.12);
+}
+
+.addTrackTitle,
+.addTrackArtist {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.addTrackTitle {
+  color: var(--text-main);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.addTrackArtist {
+  color: var(--text-muted);
+  font-size: var(--font-size-xs);
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-2);
+}
+
+.empty {
+  padding: var(--space-8);
+  color: var(--text-muted);
+  text-align: center;
+}

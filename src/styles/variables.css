@@ -1,0 +1,88 @@
+/* ==========================================================================
+   variables.css — Design tokens for Jigglypuff music player
+   Neo-brutalist pink theme matching provided mockups
+   ========================================================================== */
+
+:root {
+  /* ── Color Palette ─────────────────────────────────────────────────────── */
+  --color-bg-main:        #FFB3C1;   /* rose pink — main content area        */
+  --color-bg-card:        #FFC8D3;   /* lighter pink — card fills             */
+  --color-bg-card-hover:  #FF99AD;   /* deeper pink — card hover              */
+  --color-bg-input:       #FFD6DF;   /* very light pink — inputs              */
+  --color-sidebar:        #1A1A2E;   /* dark navy — left sidebar              */
+  --color-sidebar-hover:  #2A2A42;   /* slightly lighter — sidebar hover      */
+  --color-sidebar-active: #FF3366;   /* hot pink — active sidebar icon bg     */
+  --color-queue-panel:    #141420;   /* very dark — right queue panel         */
+  --color-queue-row:      #1E1E30;   /* dark — queue track row                */
+  --color-queue-row-act:  #2A2A40;   /* slightly lighter — queue active row   */
+  --color-player-bar:     #0F0F1A;   /* near-black — bottom player bar        */
+  --color-accent:         #FF3366;   /* hot pink — borders, highlights        */
+  --color-accent-hover:   #E6294F;   /* darker hot pink                       */
+  --color-accent-light:   rgba(255, 51, 102, 0.15); /* tint for glow effects */
+  --color-success:        #00C896;
+  --color-warning:        #FFB020;
+  --color-error:          #FF4D4D;
+
+  /* ── Text ──────────────────────────────────────────────────────────────── */
+  --text-main:            #1A1A1A;   /* dark — main content area text         */
+  --text-muted:           #6B3850;   /* muted pink-brown — secondary          */
+  --text-light:           #FFFFFF;   /* white — on dark surfaces              */
+  --text-light-muted:     rgba(255,255,255,0.55);
+  --text-on-accent:       #FFFFFF;
+
+  /* ── Typography ────────────────────────────────────────────────────────── */
+  --font-sans:            'Inter', system-ui, -apple-system, sans-serif;
+  --font-size-xs:         0.6875rem;  /* 11px */
+  --font-size-sm:         0.75rem;    /* 12px */
+  --font-size-base:       0.875rem;   /* 14px */
+  --font-size-md:         1rem;       /* 16px */
+  --font-size-lg:         1.125rem;   /* 18px */
+  --font-size-xl:         1.5rem;     /* 24px */
+  --font-size-2xl:        2rem;       /* 32px */
+  --font-weight-normal:   400;
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* ── Spacing ───────────────────────────────────────────────────────────── */
+  --space-1:  0.25rem;   /* 4px  */
+  --space-2:  0.5rem;    /* 8px  */
+  --space-3:  0.75rem;   /* 12px */
+  --space-4:  1rem;      /* 16px */
+  --space-5:  1.25rem;   /* 20px */
+  --space-6:  1.5rem;    /* 24px */
+  --space-8:  2rem;      /* 32px */
+  --space-10: 2.5rem;    /* 40px */
+  --space-12: 3rem;      /* 48px */
+
+  /* ── Layout ────────────────────────────────────────────────────────────── */
+  --sidebar-width:        52px;
+  --queue-width:          240px;
+  --player-height:        64px;
+  --topbar-height:        48px;
+  --progress-strip-h:     3px;
+
+  /* ── Borders & Shadows (Neo-brutalist) ─────────────────────────────────── */
+  --radius-sm:            6px;
+  --radius-md:            8px;
+  --radius-lg:            12px;
+  --radius-full:          9999px;
+  --border-accent:        2px solid var(--color-accent);
+  --shadow-card:          3px 3px 0 var(--color-accent);
+  --shadow-card-hover:    5px 5px 0 var(--color-accent);
+  --shadow-dark:          0 4px 24px rgba(0,0,0,0.4);
+
+  /* ── Transitions (GPU-accelerated) ─────────────────────────────────────── */
+  --transition-fast:      150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base:      220ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:      350ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Z-indices ──────────────────────────────────────────────────────────── */
+  --z-player:             100;
+  --z-topbar:             90;
+  --z-sidebar:            80;
+  --z-queue:              70;
+  --z-modal:              200;
+  --z-notification:       300;
+  --z-miniplayer:         250;
+}
